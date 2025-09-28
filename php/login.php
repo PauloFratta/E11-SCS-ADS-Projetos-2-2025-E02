@@ -13,8 +13,8 @@
             <nav>
                 <ul>
                     <li><a href="../index.html">Home</a></li>
-                    <li><a href="../php/cadastro.html">Cadastro</a></li>
-                    <li><a href="../php/login.html">Login</a></li>
+                    <li><a href="../php/cadastro.php">Cadastro</a></li>
+                    <li><a href="../php/login.php">Login</a></li>
                     <li><a href="#">Personalize seu Cano</a></li>
                 </ul>
             </nav>
@@ -35,7 +35,7 @@
 
     <label for="Senha">Senha</label>
     <input type="password" id="Senha" name="Senha" placeholder="Crie uma senha" required>
-<a href="../php/cadastro.php">Cadastrar</a>
+<a href="../php/cadastro.php">Cadastro</a>
     <button type="submit" class="btn-enviar">Login</button>
   </form>
 </fieldset>
