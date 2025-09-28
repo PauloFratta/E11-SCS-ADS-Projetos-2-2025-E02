@@ -4,11 +4,23 @@
     margin: 0;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: 'Montserrat', sans-serif; 
 }
-    
 
+/* Garante que o conteúdo cresça e empurre o footer */
+main {
+  flex: 1;
+}
+    
 .header-inner-content{
     max-width: 1300px;
     margin-left: auto;
