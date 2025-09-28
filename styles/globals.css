@@ -16,9 +16,9 @@ body {
   font-family: 'Montserrat', sans-serif; 
 }
 
-/* Garante que o conteúdo cresça e empurre o footer */
 main {
-  flex: 1;
+    flex: 1;
+    background-color: #ffffff;
 }
     
 .header-inner-content{

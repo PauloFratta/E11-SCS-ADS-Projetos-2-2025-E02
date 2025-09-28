@@ -15,7 +15,7 @@
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../php/cadastro.php">Cadastro</a></li>
                     <li><a href="../php/login.php">Login</a></li>
-                    <li><a href="#">Personalize seu Cano</a></li>
+                    <li><a href="../php/PersCano.php">Personalize seu Cano</a></li>
                 </ul>
             </nav>
             <div class="nav-icon-container">
