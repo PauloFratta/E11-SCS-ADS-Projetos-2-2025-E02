@@ -19,8 +19,8 @@
                 </ul>
             </nav>
             <div class="nav-icon-container">
-                <img src="../images/cart.png">
-                <img src="../images/menu.png" class="menu-button">
+                <<a href="../php/carrinho.php"><img src="../images/cart.png"></a>
+                <a href="../E11-SCS-ADS-Projetos-2-2025-E02/php/usuario.php"></a><img src="../images/menu.png" class="menu-button"></a>
             </div>
         </div>
     </div>
@@ -76,5 +76,32 @@
                 </ul>
             </div>
         </footer>
+<?php
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $senha = password_hash($_POST['Senha'], PASSWORD_DEFAULT);
+    $telefone = $_POST['telefone'];
+    $cpf = $_POST['cpf'];
+    $endereco = $_POST['endereco'];
+    $cidade = $_POST['cidade'];
+    $estado = $_POST['estado'];
+
+    $conn = new mysqli('localhost', 'root', '', 'pvc_projeto');
+    $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, senha, telefone, cpf, endereco, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssss", $nome, $email, $senha, $telefone, $cpf, $endereco, $cidade, $estado);
+    if ($stmt->execute()) {
+        $_SESSION['id_usuario'] = $stmt->insert_id;
+        $_SESSION['nome'] = $nome;
+        header('Location: ../index.html');
+        exit;
+    } else {
+        $erro = "E-mail já cadastrado!";
+    }
+    $stmt->close();
+    $conn->close();
+}
+?>
 </body>
 </html>

@@ -19,8 +19,8 @@
                 </ul>
             </nav>
             <div class="nav-icon-container">
-                <img src="../images/cart.png">
-                <img src="../images/menu.png" class="menu-button">
+                <a href="../php/carrinho.php"><img src="../images/cart.png"></a>
+                <a href="../E11-SCS-ADS-Projetos-2-2025-E02/php/usuario.php"></a><img src="../images/menu.png" class="menu-button"></a>
             </div>
         </div>
     </div>
@@ -29,15 +29,15 @@
         <Br>
         <fieldset>
   <legend>Login</legend>
-  <form method="post" action="login.html" class="form-cadastro">
-    <label for="nome">Nome Completo</label>
-    <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+  <form method="post" action="login.php" class="form-cadastro">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
 
-    <label for="Senha">Senha</label>
-    <input type="password" id="Senha" name="Senha" placeholder="Crie uma senha" required>
-<a href="../php/cadastro.php">Cadastro</a>
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+    <a href="../php/cadastro.php">Cadastro</a>
     <button type="submit" class="btn-enviar">Login</button>
-  </form>
+</form>
 </fieldset>
     </main>
         <footer class="site-footer" id="Contato">
@@ -53,3 +53,26 @@
         </footer>
 </body>
 </html>
+<?php
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+
+    $conn = new mysqli('localhost', 'root', '', 'pvc_projeto');
+    $stmt = $conn->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($id, $nome, $senha_hash);
+    if ($stmt->fetch() && password_verify($senha, $senha_hash)) {
+        $_SESSION['id_usuario'] = $id;
+        $_SESSION['nome'] = $nome;
+        header('Location: ../php/usuario.php');
+        exit;
+    } else {
+        $erro = "E-mail ou senha inválidos!";
+    }
+    $stmt->close();
+    $conn->close();
+}
+?>

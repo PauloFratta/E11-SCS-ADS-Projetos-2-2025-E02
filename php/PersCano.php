@@ -31,8 +31,8 @@
                 </ul>
             </nav>
             <div class="nav-icon-container">
-                <img src="../images/cart.png">
-                <img src="../images/menu.png" class="menu-button">
+                <a href="../php/carrinho.php"><img src="../images/cart.png"></a>
+                <a href="../E11-SCS-ADS-Projetos-2-2025-E02/php/usuario.php"></a><img src="../images/menu.png" class="menu-button"></a>
             </div>
         </div>
     </div>
@@ -40,27 +40,27 @@
   <div class="container-cano">
   <fieldset>
       <legend>Personalize seu Cano</legend>
-      <form>
+      <form method="POST" action="">
       <div class="form-grid">
         <div>
           <label for="diametro">Diâmetro externo (mm)</label>
-          <input id="diametro" type="number" min="1" value="110">
+          <input id="diametro" name="diametro" type="number" min="1" value="110">
         </div>
         <div>
           <label for="comprimento">Comprimento (mm)</label>
-          <input id="comprimento" type="number" min="1" value="1000">
+          <input id="comprimento" name="comprimento" type="number" min="1" value="1000">
         </div>
         <div>
           <label for="espessura">Espessura (mm)</label>
-          <input id="espessura" type="number" min="0.5" step="0.1" value="3.6">
+          <input id="espessura" name="espessura" type="number" min="0.5" step="0.1" value="3.6">
         </div>
         <div>
           <label for="quantidade">Quantidade</label>
-          <input id="quantidade" type="number" min="1" value="1">
+          <input id="quantidade" name="quantidade" type="number" min="1" value="1">
         </div>
         <div>
           <label for="formato">Formato</label>
-          <select id="formato">
+          <select id="formato" name="tipo">
             <option value="reta" selected>Reta</option>
             <option value="cotovelo">Cotovelo</option>
             <option value="t">T</option>
@@ -68,7 +68,15 @@
         </div>
         <div>
           <label for="segments">Suavidade (segments)</label>
-          <input id="segments" type="number" min="8" max="256" value="64">
+          <input id="segments" name="segments" type="number" min="8" max="256" value="64">
+        </div>
+        <div>
+          <label for="cor">Cor</label>
+          <select id="cor" name="cor">
+            <option value="Branco">Branco</option>
+            <option value="Cinza">Cinza</option>
+            <option value="Preto">Preto</option>
+          </select>
         </div>
       </div>
 
@@ -98,3 +106,42 @@
   </div>
 </body>
 </html>
+
+<?php
+session_start();
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: login.php');
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_usuario = $_SESSION['id_usuario'];
+    $tipo = $_POST['tipo'];
+    $comprimento = $_POST['comprimento'];
+    $diametro = $_POST['diametro'];
+    $cor = $_POST['cor'];
+    $espessura = $_POST['espessura'];
+    $quantidade = $_POST['quantidade'];
+
+    $conn = new mysqli('localhost', 'root', '', 'pvc_projeto');
+    $stmt = $conn->prepare("INSERT INTO cano_personalizado (id_usuario, tipo, comprimento, diametro, cor, espessura, quantidade) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isissdi", $id_usuario, $tipo, $comprimento, $diametro, $cor, $espessura, $quantidade);
+    $stmt->execute();
+    $cano_id = $stmt->insert_id; // pega o ID do cano personalizado recém-criado
+    $stmt->close();
+    $conn->close();
+
+    // Adiciona o cano personalizado ao carrinho na sessão
+    $_SESSION['carrinho']['cano_personalizado'] = [
+        'id' => $cano_id,
+        'tipo' => $tipo,
+        'comprimento' => $comprimento,
+        'diametro' => $diametro,
+        'cor' => $cor,
+        'espessura' => $espessura,
+        'quantidade' => $quantidade
+    ];
+
+    header('Location: carrinho.php');
+    exit;
+}
+?>
